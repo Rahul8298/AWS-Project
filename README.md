@@ -4,7 +4,7 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 
 ---
 
-## 🔧 How It Works  
+## How It Works  
 
 1. **Terraform** provisions AWS infrastructure:  
    - ECS Cluster & Service  
@@ -19,7 +19,7 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 
 ---
 
-## 📂 Repository Structure  
+##  Repository Structure  
 
 ```
 .
@@ -30,7 +30,7 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 
 ---
 
-## ⚙️ Required Setup  
+## Required Setup  
 
 ### GitHub → **Variables**  
 - `AWS_REGION` – AWS region (e.g., `ap-south-1`)  
@@ -43,17 +43,17 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 
 ---
 
-## 🐳 Run Locally  
+##  Run Locally  
 
 ```bash
 cd Application
 docker build -t myapp .
-docker run -p 8080:8080 myapp
+docker run -p 8080:80 myapp
 ```
 
 ---
 
-## ✅ Highlights  
+##  Highlights  
 
 - **Infrastructure as Code** with Terraform  
 - **Secure CI/CD** with GitHub Actions + AWS OIDC  
@@ -62,7 +62,7 @@ docker run -p 8080:8080 myapp
 
 ---
 
-## 🎯 Why This Approach  
+##  Why This Approach  
 
 - **Terraform** → ensures infra is consistent and version-controlled.  
 - **ECS + ECR** → fully managed container orchestration with easy scaling.  
