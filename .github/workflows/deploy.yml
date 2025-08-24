@@ -4,6 +4,12 @@ on:
   push:
     branches: [ main ]
 
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
+  ECS_SERVICE: ${{ vars.ECS_SERVICE }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
