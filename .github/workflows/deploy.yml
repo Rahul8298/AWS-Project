@@ -38,11 +38,11 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./Terraform
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -var="container_image_tag=${{ github.sha }}"
 
       - name: Terraform Apply
         working-directory: ./Terraform
-        run: terraform apply -auto-approve tfplan -var="container_image_tag=${{ github.sha }}"
+        run: terraform apply -auto-approve tfplan 
 
       # 🔹 Login to ECR
       - name: Login to Amazon ECR
