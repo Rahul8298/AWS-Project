@@ -17,12 +17,12 @@ variable "environment" {
 ############################################################### AWS VPC ##############################################################
 variable "cidr_block" {
   description = "Specify the CIDR Block for AWS VPC"
-  type = string  
+  type        = string
 }
 
 variable "subnet_cidrs" {
   description = "Mention the CIDR Blocks for Subnets"
-  type = list(string)
+  type        = list(string)
 }
 
 ############################################################### AWS ECS ##############################################################
@@ -30,5 +30,4 @@ variable "subnet_cidrs" {
 variable "container_image_tag" {
   description = "Docker image tag to deploy"
   type        = string
-  default     = "latest"
 }

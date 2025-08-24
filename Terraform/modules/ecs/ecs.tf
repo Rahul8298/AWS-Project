@@ -1,3 +1,7 @@
+# ------------------------
+# ECS Task Security Group
+# ------------------------
+
 resource "aws_security_group" "ecs_tasks" {
   name        = "${var.project_name}-ecs-tasks-sg"
   description = "Allow inbound traffic for ECS tasks"
@@ -10,7 +14,7 @@ resource "aws_security_group" "ecs_tasks" {
       from_port   = ingress.value
       to_port     = ingress.value
       protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = var.ecs_allowed_cidrs
     }
   }
 
@@ -27,6 +31,7 @@ resource "aws_security_group" "ecs_tasks" {
 # -------------------
 # ECR Repository
 # -------------------
+
 resource "aws_ecr_repository" "app" {
   name = "${var.project_name}-app"
 
@@ -40,15 +45,17 @@ resource "aws_ecr_repository" "app" {
 # -------------------
 # ECS Cluster
 # -------------------
+
 resource "aws_ecs_cluster" "main" {
   name = "${var.project_name}-cluster"
 
   tags = var.common_tags
 }
 
-# -------------------
+# ------------------------
 # ECS Task Execution Role
-# -------------------
+# ------------------------
+
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "${var.project_name}-ecs-task-execution-role"
 
@@ -74,6 +81,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 # -------------------
 # ECS Task Definition
 # -------------------
+
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.project_name}-task"
   network_mode             = var.ecs_task_network_mode
@@ -106,15 +114,16 @@ resource "aws_ecs_task_definition" "app" {
 
   tags = merge(
     {
-    Name        = "${var.project_name}-task-definition"
+      Name = "${var.project_name}-task-definition"
     },
     var.common_tags
   )
 }
 
-# -------------------
+# ----------------------
 # CloudWatch Log Group
-# -------------------
+# ----------------------
+
 resource "aws_cloudwatch_log_group" "ecs_logs" {
   name              = "/ecs/${var.project_name}"
   retention_in_days = var.log_retention_days
@@ -125,6 +134,7 @@ resource "aws_cloudwatch_log_group" "ecs_logs" {
 # -------------------
 # ECS Service
 # -------------------
+
 resource "aws_ecs_service" "app" {
   name            = "${var.project_name}-service"
   cluster         = aws_ecs_cluster.main.id
@@ -139,5 +149,5 @@ resource "aws_ecs_service" "app" {
   }
 
   tags = var.common_tags
-  
+
 }
