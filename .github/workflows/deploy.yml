@@ -4,12 +4,6 @@ on:
   push:
     branches: [ main ]
 
-env:
-  AWS_REGION: ap-south-1
-  ECR_REPOSITORY: demo-aws-project-app   # 👈 change if needed
-  ECS_CLUSTER: demo-aws-project-cluster
-  ECS_SERVICE: demo-aws-project-service
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
