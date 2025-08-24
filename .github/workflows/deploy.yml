@@ -16,7 +16,7 @@ jobs:
     permissions:
       id-token: write      # 👈 needed for OIDC
       contents: read
-      
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -33,12 +33,15 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
+        working-directory: ./Terraform
         run: terraform init
 
       - name: Terraform Plan
+        working-directory: ./Terraform
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
+        working-directory: ./Terraform
         run: terraform apply -auto-approve tfplan
 
       # 🔹 Login to ECR
@@ -48,6 +51,7 @@ jobs:
 
       # 🔹 Build and Push Docker image
       - name: Build and Push Docker image
+        working-directory: ./Application
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
