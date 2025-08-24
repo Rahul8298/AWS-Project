@@ -42,7 +42,7 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ./Terraform
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve tfplan -var="container_image_tag=${{ github.sha }}"
 
       # 🔹 Login to ECR
       - name: Login to Amazon ECR
@@ -55,7 +55,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-          IMAGE_TAG: "latest"   # 👈 use commit SHA for unique tags
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
