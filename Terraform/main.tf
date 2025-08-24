@@ -26,6 +26,7 @@ module "ecs" {
   vpc_id = module.vpc.vpc_id
   ecs_task_subnets = module.vpc.public_subnet_ids
   project_name = var.project_name
+  container_image_tag = var.container_image_tag
   common_tags = local.common_tags
 }
 

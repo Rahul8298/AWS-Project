@@ -26,3 +26,9 @@ variable "subnet_cidrs" {
 }
 
 ############################################################### AWS ECS ##############################################################
+
+variable "container_image_tag" {
+  description = "Docker image tag to deploy"
+  type        = string
+  default     = "latest"
+}
