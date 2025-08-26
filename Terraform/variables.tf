@@ -25,6 +25,10 @@ variable "subnet_cidrs" {
   type        = list(string)
 }
 
+variable "private_subnet_cidrs" {
+  description = "Mention the CIDR Blocks for Subnets"
+  type        = list(string)
+}
 ############################################################### AWS ECS ##############################################################
 
 variable "container_image_tag" {

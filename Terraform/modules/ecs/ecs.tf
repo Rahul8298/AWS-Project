@@ -71,6 +71,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
       }
     ]
   })
+  tags = var.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
@@ -104,7 +105,7 @@ resource "aws_ecs_task_definition" "app" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = "/ecs/${var.project_name}"
+          "awslogs-group"         = "/ecs/${var.project_name}-container"
           "awslogs-region"        = var.region
           "awslogs-stream-prefix" = "ecs"
         }
@@ -146,6 +147,12 @@ resource "aws_ecs_service" "app" {
     subnets          = var.ecs_task_subnets
     security_groups  = [aws_security_group.ecs_tasks.id]
     assign_public_ip = var.ecs_assign_public_ip
+  }
+
+  load_balancer {
+    target_group_arn = var.alb_tg_arn
+    container_name   = "${var.project_name}-container"
+    container_port   = var.container_port
   }
 
   tags = var.common_tags

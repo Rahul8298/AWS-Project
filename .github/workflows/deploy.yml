@@ -14,23 +14,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write      # 👈 needed for OIDC
+      id-token: write      
       contents: read
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 🔹 Configure AWS credentials (using OIDC is better than static keys)
+      # Configure AWS credentials 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # 🔹 Setup Terraform
+      # Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
 
       - name: Terraform Init
         working-directory: ./Terraform
@@ -44,12 +46,12 @@ jobs:
         working-directory: ./Terraform
         run: terraform apply -auto-approve tfplan 
 
-      # 🔹 Login to ECR
+      # Login to ECR
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 🔹 Build and Push Docker image
+      # Build and Push Docker image
       - name: Build and Push Docker image
         working-directory: ./Application
         env:
@@ -60,7 +62,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # 🔹 Force new ECS deployment
+      # Force new ECS deployment
       - name: Force new ECS deployment
         run: |
           aws ecs update-service \

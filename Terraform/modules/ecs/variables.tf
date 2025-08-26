@@ -28,7 +28,6 @@ variable "ecs_ingress_ports" {
 variable "ecs_allowed_cidrs" {
   description = "CIDR blocks allowed to access ECS tasks"
   type        = list(string)
-  default     = ["0.0.0.0/0"]
 }
 
 variable "ecs_task_cpu" {
@@ -93,4 +92,9 @@ variable "launch_type" {
 variable "ecs_task_subnets" {
   description = "The Subnets for ECS task"
   type        = list(string)
+}
+
+variable "alb_tg_arn" {
+  description = "The ARN for the Target Group"
+  type        = string
 }

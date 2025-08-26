@@ -1,8 +1,3 @@
-variable "region" {
-  description = "AWS region"
-  type        = string
-}
-
 variable "project_name" {
   description = "Project name to be used for tagging"
   type        = string
@@ -32,6 +27,11 @@ variable "cidr_block" {
 }
 
 variable "subnet_cidrs" {
+  description = "List of subnet CIDRs"
+  type        = list(string)
+}
+
+variable "private_subnet_cidrs" {
   description = "List of subnet CIDRs"
   type        = list(string)
 }

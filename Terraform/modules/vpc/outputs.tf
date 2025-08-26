@@ -12,9 +12,9 @@ output "vpc_cidr_block" {
   value       = aws_vpc.main.cidr_block
 }
 
-# -------------------
-# Subnet Outputs
-# -------------------
+# ----------------------
+# Public Subnet Outputs
+# ----------------------
 
 output "public_subnet_ids" {
   description = "List of IDs of the public subnets"
@@ -29,6 +29,20 @@ output "public_subnet_cidrs" {
 output "public_subnet_azs" {
   description = "List of AZs where public subnets are created"
   value       = aws_subnet.public[*].availability_zone
+}
+
+# ----------------------
+# Private Subnet Outputs
+# ----------------------
+
+output "private_subnet_ids" {
+  description = "List of IDs of the private subnets"
+  value       = aws_subnet.private[*].id
+}
+
+output "private_subnet_cidrs" {
+  description = "List of CIDR blocks for the private subnets"
+  value       = aws_subnet.private[*].cidr_block
 }
 
 # --------------------------
