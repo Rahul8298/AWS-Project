@@ -25,7 +25,7 @@ module "ecs" {
   region              = var.region
   vpc_id              = module.vpc.vpc_id
   ecs_task_subnets    = module.vpc.private_subnet_ids
-  ecs_allowed_cidrs   = module.vpc.vpc_cidr_block
+  ecs_allowed_cidrs   = [module.vpc.vpc_cidr_block]
   project_name        = var.project_name
   container_image_tag = var.container_image_tag
   alb_tg_arn          = module.elb.target_group_arn

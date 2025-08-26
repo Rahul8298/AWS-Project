@@ -45,7 +45,7 @@ resource "aws_internet_gateway" "main" {
 resource "aws_nat_gateway" "main" {
   connectivity_type = "public"
   allocation_id     = aws_eip.eip_nat.allocation_id
-  subnet_id         = aws_subnet.public[0]
+  subnet_id         = aws_subnet.public[0].id
 
   tags = merge(
     {
