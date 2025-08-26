@@ -49,6 +49,6 @@ module "elb" {
   common_tags  = local.common_tags
 }
 
-output "ALB_DNS" {
-  value = module.elb.alb_dns_name
+output "ALB_URL" {
+  value = "http://${module.elb.alb_dns_name}"
 }
