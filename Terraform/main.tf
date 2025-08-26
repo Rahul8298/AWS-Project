@@ -32,11 +32,11 @@ module "ecs" {
   common_tags         = local.common_tags
 }
 
-output "repository_url" {
+output "ECR_REPOSITORY_URL" {
   value = module.ecs.ecr_repository_url
 }
 
-output "service_name" {
+output "ECS_SERVICE_NAME" {
   value = module.ecs.ecs_service_name
 }
 
@@ -49,6 +49,6 @@ module "elb" {
   common_tags  = local.common_tags
 }
 
-output "loadbalancer_dns" {
+output "ALB_DNS" {
   value = module.elb.alb_dns_name
 }
