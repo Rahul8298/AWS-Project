@@ -1,4 +1,4 @@
-#  Node.js Static HTML App Deployment to AWS ECS  
+# Node.js Static HTML App Deployment to AWS ECS  
 
 This project demonstrates deploying a **Node.js application (static HTML serving)** to **AWS ECS** using **Terraform** for infrastructure and **GitHub Actions** for CI/CD automation.  
 
@@ -9,9 +9,16 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 1. **Terraform** provisions AWS infrastructure:  
    - ECS Cluster & Service  
    - ECR Repository  
-   - Networking (VPC, Subnets, etc.)  
+   - Application Load Balancer (ALB) in **public subnets**  
+   - ECS tasks running in **private subnets**  
+   - Networking (VPC, Subnets, Security Groups, etc.)  
 
-2. **GitHub Actions** workflow (`.github/workflows/deploy.yml`) automates deployment on every push to `main`:  
+2. **Traffic Flow**:  
+   - The **ALB** accepts incoming requests from the internet.  
+   - Traffic is securely routed from the ALB in the public subnet → to ECS tasks in private subnets.  
+   - This ensures tasks are not directly exposed to the internet, improving security.  
+
+3. **GitHub Actions** workflow (`.github/workflows/deploy.yml`) automates deployment on every push to `main`:  
    - Configures AWS credentials via OIDC (no static keys).  
    - Runs `terraform init`, `plan`, and `apply`.  
    - Builds Docker image of the app and pushes it to Amazon ECR.  
@@ -19,12 +26,12 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 
 ---
 
-##  Repository Structure  
+## Repository Structure  
 
 ```
 .
 ├── Application/      # Node.js static app + Dockerfile
-├── Terraform/        # IaC for ECS, ECR, networking
+├── Terraform/        # IaC for ECS, ECR, networking, ALB
 └── .github/workflows # GitHub Actions pipeline
 ```
 
@@ -43,7 +50,7 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 
 ---
 
-##  Run Locally  
+## Run Locally  
 
 ```bash
 cd Application
@@ -53,18 +60,21 @@ docker run -p 8080:80 myapp
 
 ---
 
-##  Highlights  
+## Highlights  
 
 - **Infrastructure as Code** with Terraform  
+- **Application Load Balancer** for secure, scalable internet-facing traffic routing  
+- **Private ECS Tasks** → enhanced security (not directly exposed to internet)  
 - **Secure CI/CD** with GitHub Actions + AWS OIDC  
 - **Immutable Deployments** using Git commit SHA tags  
 - **Zero-downtime updates** with ECS rolling deployments  
 
 ---
 
-##  Why This Approach  
+## Why This Approach  
 
 - **Terraform** → ensures infra is consistent and version-controlled.  
 - **ECS + ECR** → fully managed container orchestration with easy scaling.  
+- **ALB + Private Subnets** → enforces security best practices for production workloads.  
 - **GitHub Actions with OIDC** → eliminates static AWS credentials, improving security.  
 - **SHA-based image tagging** → guarantees reproducible and traceable deployments.  
