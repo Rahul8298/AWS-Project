@@ -98,3 +98,9 @@ variable "alb_tg_arn" {
   description = "The ARN for the Target Group"
   type        = string
 }
+
+variable "health_check_grace_period_seconds" {
+  description = "The value of health check grace period for ECS service"
+  type = number
+  default = 300
+}
