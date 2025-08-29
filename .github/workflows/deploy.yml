@@ -11,7 +11,7 @@ env:
   ECS_SERVICE: ${{ vars.ECS_SERVICE }}
 
 jobs:
-  deploy:
+  Deploy:
     runs-on: ubuntu-latest
     permissions:
       id-token: write      

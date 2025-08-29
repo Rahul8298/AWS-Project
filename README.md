@@ -4,6 +4,12 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 
 ---
 
+## Architecture Flow
+
+![Architecture Diagram](architecture.png)  
+
+---
+
 ## How It Works  
 
 1. **Terraform** provisions AWS infrastructure:  
@@ -18,11 +24,16 @@ This project demonstrates deploying a **Node.js application (static HTML serving
    - Traffic is securely routed from the ALB in the public subnet → to ECS tasks in private subnets.  
    - This ensures tasks are not directly exposed to the internet, improving security.  
 
-3. **GitHub Actions** workflow (`.github/workflows/deploy.yml`) automates deployment on every push to `main`:  
-   - Configures AWS credentials via OIDC (no static keys).  
-   - Runs `terraform init`, `plan`, and `apply`.  
-   - Builds Docker image of the app and pushes it to Amazon ECR.  
-   - Forces ECS service to pull the new image and redeploy.  
+---
+
+## GitHub Actions CI/CD  
+
+Workflow (`.github/workflows/deploy.yml`) automates deployment on every push to `main`:  
+
+- Configures AWS credentials via OIDC (no static keys).  
+- Runs `terraform init`, `plan`, and `apply`.  
+- Builds Docker image of the app and pushes it to Amazon ECR.  
+- Forces ECS service to pull the new image and redeploy.  
 
 ---
 
@@ -52,13 +63,27 @@ This project demonstrates deploying a **Node.js application (static HTML serving
 
 ## Run Locally  
 
+### 1. Run Application with Docker  
+
 ```bash
 cd Application
 docker build -t myapp .
 docker run -p 8080:80 myapp
 ```
 
+App will be available at: **http://localhost:8080**
+
 ---
+
+### 2. Provision Infrastructure with Terraform  
+
+```bash
+cd Terraform
+terraform init
+terraform plan -out=tfplan
+terraform apply -auto-approve tfplan
+```
+
 
 ## Highlights  
 
@@ -71,10 +96,4 @@ docker run -p 8080:80 myapp
 
 ---
 
-## Why This Approach  
-
-- **Terraform** → ensures infra is consistent and version-controlled.  
-- **ECS + ECR** → fully managed container orchestration with easy scaling.  
-- **ALB + Private Subnets** → enforces security best practices for production workloads.  
-- **GitHub Actions with OIDC** → eliminates static AWS credentials, improving security.  
-- **SHA-based image tagging** → guarantees reproducible and traceable deployments.  
+[def]: architecture.png

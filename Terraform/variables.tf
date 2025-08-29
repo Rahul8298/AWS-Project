@@ -34,4 +34,5 @@ variable "private_subnet_cidrs" {
 variable "container_image_tag" {
   description = "Docker image tag to deploy"
   type        = string
+  default     = "latest"
 }
