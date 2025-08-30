@@ -18,8 +18,7 @@ jobs:
       contents: read
 
     steps:
-      # Checkout Code Repository
-      - name: Checkout Repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       # Configure AWS credentials 
