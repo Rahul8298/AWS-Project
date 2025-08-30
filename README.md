@@ -89,7 +89,7 @@ terraform apply -auto-approve tfplan
 
 - **Infrastructure as Code** with Terraform  
 - **Application Load Balancer** for secure, scalable internet-facing traffic routing  
-- **Private ECS Tasks** → enhanced security (not directly exposed to internet)  
+- **Private ECS Tasks** for enhanced security (not directly exposed to internet)  
 - **Secure CI/CD** with GitHub Actions + AWS OIDC  
 - **Immutable Deployments** using Git commit SHA tags  
 - **Zero-downtime updates** with ECS rolling deployments  
