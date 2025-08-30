@@ -5,10 +5,12 @@ on:
     branches: [ main ]
 
 env:
+  # Environment Variables
   AWS_REGION: ${{ vars.AWS_REGION }}
   ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
   ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
   ECS_SERVICE: ${{ vars.ECS_SERVICE }}
+  IMAGE_TAG: ${{ github.sha }} 
 
 jobs:
   Deploy:
@@ -18,12 +20,13 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout repo
+      # Checkout Code Repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       # Configure AWS credentials 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v4.3.1
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
@@ -40,7 +43,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./Terraform
-        run: terraform plan -out=tfplan -var="container_image_tag=${{ github.sha }}"
+        run: terraform plan -out=tfplan -var="container_image_tag=$IMAGE_TAG"
 
       - name: Terraform Apply
         working-directory: ./Terraform
@@ -56,8 +59,6 @@ jobs:
         working-directory: ./Application
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -66,6 +67,6 @@ jobs:
       - name: Force new ECS deployment
         run: |
           aws ecs update-service \
-            --cluster ${{ env.ECS_CLUSTER }} \
-            --service ${{ env.ECS_SERVICE }} \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
             --force-new-deployment
