@@ -65,12 +65,6 @@ variable "ecs_desired_count" {
   default     = 1
 }
 
-variable "ecs_assign_public_ip" {
-  description = "Assign a public IP to ECS tasks"
-  type        = bool
-  default     = true
-}
-
 variable "log_retention_days" {
   description = "Number of days to retain ECS logs"
   type        = number
