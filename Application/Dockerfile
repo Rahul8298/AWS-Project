@@ -4,7 +4,7 @@ FROM node:18-alpine
 WORKDIR /usr/src/app
 
 # Copy only package files & install dependencies
-COPY package.json ./
+COPY package*.json ./
 RUN npm install --production
 
 # Copy application files explicitly
